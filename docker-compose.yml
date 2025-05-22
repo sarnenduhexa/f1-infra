@@ -32,9 +32,20 @@ services:
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
       DB_DATABASE: f1_db
+      CORS_ORIGINS: http://localhost:5173
     depends_on:
       postgres:
         condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - f1-network
+  frontend:
+    image: sarnenduhexa/f1-fe:latest
+    container_name: f1-fe
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
     restart: unless-stopped
     networks:
       - f1-network
