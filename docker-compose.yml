@@ -34,6 +34,36 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  redis:
+    image: redis/redis-stack:latest
+    container_name: f1_redis
+    ports:
+      - "6379:6379"  # Redis port
+      - "8001:8001"  # RedisInsight port
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - f1-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   backend:
     image: sarnenduhexa/f1-be:latest
     container_name: f1-be
@@ -47,8 +77,12 @@ services:
       DB_DATABASE: ${DB_DATABASE:-f1_db}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:5174}
       NODE_ENV: ${NODE_ENV:-production}
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     restart: unless-stopped
     networks:
@@ -128,4 +162,7 @@ networks:
 volumes:
   postgres_data:
     name: f1_postgres_data
+    driver: local
+  redis_data:
+    name: f1_redis_data
     driver: local 
