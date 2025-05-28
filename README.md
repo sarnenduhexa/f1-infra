@@ -3,7 +3,7 @@ Repository for the Infra for the F1 app
 
 ## Architecture Overview
 
-This project uses Docker Compose to orchestrate three main services:
+This project uses Docker Compose to orchestrate four main services:
 
 ### Services
 
@@ -16,10 +16,21 @@ This project uses Docker Compose to orchestrate three main services:
      - Automatic restart policy
      - Secure configuration through environment variables
 
-2. **Backend Service (`backend`)**
+2. **Redis Stack (`redis`)**
+   - Uses Redis Stack for caching and monitoring
+   - Features:
+     - Redis server for caching (port 6379)
+     - RedisInsight for monitoring (port 8001)
+     - Persistent data storage using Docker volumes
+     - Health checks to ensure Redis availability
+     - Resource limits (512MB memory, 0.5 CPU)
+     - Automatic restart policy
+
+3. **Backend Service (`backend`)**
    - Node.js application running on port 3001 (mapped to container port 3000)
    - Features:
      - Connects to PostgreSQL database
+     - Connects to Redis for caching
      - Health check endpoint at `/health`
      - Resource limits (1GB memory, 1 CPU)
      - Security features:
@@ -29,7 +40,7 @@ This project uses Docker Compose to orchestrate three main services:
      - Automatic restart policy
      - CORS configuration for frontend access
 
-3. **Frontend Service (`frontend`)**
+4. **Frontend Service (`frontend`)**
    - Nginx-based web application running on port 5174
    - Features:
      - Serves static web content
@@ -49,7 +60,8 @@ This project uses Docker Compose to orchestrate three main services:
 ### Data Persistence
 
 - PostgreSQL data is persisted using a named volume `f1_postgres_data`
-- Volume is mounted at `/var/lib/postgresql/data` in the PostgreSQL container
+- Redis data is persisted using a named volume `f1_redis_data`
+- Volumes are mounted at their respective data directories in the containers
 
 ### Security Features
 
@@ -71,6 +83,10 @@ DB_USERNAME=postgres    # Database username
 DB_PASSWORD=postgres    # Database password
 DB_DATABASE=f1_db      # Database name
 
+# Redis Configuration
+REDIS_HOST=redis       # Redis host (default: redis)
+REDIS_PORT=6379       # Redis port (default: 6379)
+
 # Application Configuration
 CORS_ORIGINS=http://localhost:5173,http://localhost:5174  # Allowed CORS origins
 NODE_ENV=production    # Node environment (production/development)
@@ -80,7 +96,7 @@ Make sure to set appropriate values for these variables based on your environmen
 
 ### Service Dependencies
 
-- Backend service depends on PostgreSQL being healthy
+- Backend service depends on PostgreSQL and Redis being healthy
 - Frontend service depends on Backend being healthy
 - Services start in the correct order due to dependency configuration
 
