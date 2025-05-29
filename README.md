@@ -3,7 +3,7 @@ Repository for the Infra for the F1 app
 
 ## Architecture Overview
 
-This project uses Docker Compose to orchestrate four main services:
+This project uses Docker Compose to orchestrate five main services:
 
 ### Services
 
@@ -51,6 +51,16 @@ This project uses Docker Compose to orchestrate four main services:
        - Temporary filesystem for Nginx cache and logs
      - Automatic restart policy
 
+5. **pgAdmin (`pgadmin`)**
+   - Web-based PostgreSQL administration tool
+   - Features:
+     - Accessible on port 5050
+     - Secure login with configurable credentials
+     - Health checks for service availability
+     - Resource limits (256MB memory, 0.5 CPU)
+     - Automatic restart policy
+     - Depends on PostgreSQL being healthy
+
 ### Network Configuration
 
 - All services are connected through a custom bridge network `f1-network`
@@ -86,6 +96,10 @@ DB_DATABASE=f1_db      # Database name
 # Redis Configuration
 REDIS_HOST=redis       # Redis host (default: redis)
 REDIS_PORT=6379       # Redis port (default: 6379)
+
+# pgAdmin Configuration
+PGADMIN_EMAIL=admin@admin.com    # pgAdmin login email
+PGADMIN_PASSWORD=admin          # pgAdmin login password
 
 # Application Configuration
 CORS_ORIGINS=http://localhost:5173,http://localhost:5174  # Allowed CORS origins
