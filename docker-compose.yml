@@ -67,6 +67,8 @@ services:
   backend:
     image: sarnenduhexa/f1-be:latest
     container_name: f1-be
+    # TODO: Remove this once the backend is built for arm64
+    platform: linux/amd64
     ports:
       - "3001:3000"
     environment:
@@ -117,6 +119,8 @@ services:
   frontend:
     image: sarnenduhexa/f1-fe:latest
     container_name: f1-fe
+    # TODO: Remove this once the frontend is built for arm64
+    platform: linux/amd64
     ports:
       - "5174:80"
     depends_on:
