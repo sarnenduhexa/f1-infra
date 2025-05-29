@@ -55,6 +55,7 @@ This project uses Docker Compose to orchestrate five main services:
    - Web-based PostgreSQL administration tool
    - Features:
      - Accessible on port 5050
+     - Persistent data storage using Docker volumes
      - Secure login with configurable credentials
      - Health checks for service availability
      - Resource limits (256MB memory, 0.5 CPU)
@@ -71,7 +72,10 @@ This project uses Docker Compose to orchestrate five main services:
 
 - PostgreSQL data is persisted using a named volume `f1_postgres_data`
 - Redis data is persisted using a named volume `f1_redis_data`
+- PGAdmin data is persisted using a named volume `f1_pgadmin_data`
 - Volumes are mounted at their respective data directories in the containers
+
+Note: The PGAdmin volume (`f1_pgadmin_data`) stores configuration and session data, preventing the creation of anonymous volumes and ensuring data persistence between container restarts.
 
 ### Security Features
 
@@ -94,6 +98,7 @@ DB_PASSWORD=postgres    # Database password
 DB_DATABASE=f1_db      # Database name
 
 # Redis Configuration
+REDIS_ENABLED=true     # To enable Redis store
 REDIS_HOST=redis       # Redis host (default: redis)
 REDIS_PORT=6379       # Redis port (default: 6379)
 

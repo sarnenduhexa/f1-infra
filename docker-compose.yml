@@ -7,8 +7,8 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_DB: ${DB_DATABASE:-f1_db}
     # Remove port mapping for security - only accessible within Docker network
-    ports:
-      - "5432:5432"
+    # ports:
+    #   - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
@@ -38,7 +38,8 @@ services:
     image: redis/redis-stack:7.2.0-v17
     container_name: f1_redis
     ports:
-      - "6379:6379"  # Redis port
+      # This is not needed as this will be accessed internally only
+      # - "6379:6379"  # Redis port
       - "8001:8001"  # RedisInsight port
     volumes:
       - redis_data:/data
@@ -79,6 +80,7 @@ services:
       DB_DATABASE: ${DB_DATABASE:-f1_db}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:5174}
       NODE_ENV: ${NODE_ENV:-production}
+      REDIS_ENABLED: ${REDIS_ENABLED:-true}
       REDIS_HOST: ${REDIS_HOST:-redis}
       REDIS_PORT: ${REDIS_PORT:-6379}
     depends_on:
@@ -164,6 +166,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
     ports:
       - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
     depends_on:
       postgres:
         condition: service_healthy
@@ -203,4 +207,7 @@ volumes:
     driver: local
   redis_data:
     name: f1_redis_data
+    driver: local
+  pgadmin_data:
+    name: f1_pgadmin_data
     driver: local 
