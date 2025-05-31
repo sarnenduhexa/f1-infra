@@ -2,6 +2,15 @@
 
 This a document which is an overview of the whole assignment, for more information of respective projects BE and FE please refer to the README file of those projects.
 
+## Live demo
+
+You can find a live demo here -> https://f1-fe-latest.onrender.com/
+You can find the swagger api here -> https://f1-be-latest.onrender.com/api
+
+> [!NOTE]
+> This is deployed to the free tire of render, So it can take up to a minute to spin up after an idle state.
+> The BE is deployed to Render as well. So, if it was idle, the first time data fetch can also take upto a minute.
+
 ## Project Overview
 This submission presents a complete full-stack implementation of an F1 Dashboard application, consisting of three main components:
 1. Frontend (React-based web application)
