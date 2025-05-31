@@ -4,8 +4,8 @@ This a document which is an overview of the whole assignment, for more informati
 
 ## Live demo
 
-You can find a live demo here -> https://f1-fe-latest.onrender.com/
-You can find the swagger api here -> https://f1-be-latest.onrender.com/api
+- You can find a live demo here -> https://f1-fe-latest.onrender.com/
+- You can find the swagger api here -> https://f1-be-latest.onrender.com/api
 
 > [!NOTE]
 > This is deployed to the free tire of render, So it can take up to a minute to spin up after an idle state.
