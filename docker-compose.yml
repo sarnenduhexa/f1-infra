@@ -119,7 +119,7 @@ services:
       - /var/cache
 
   frontend:
-    image: sarnenduhexa/f1-fe:latest
+    image: sarnenduhexa/f1-fe:compose-latest
     container_name: f1-fe
     # TODO: Remove this once the frontend is built for arm64
     platform: linux/amd64
