@@ -7,8 +7,9 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_DB: ${DB_DATABASE:-f1_db}
     # Remove port mapping for security - only accessible within Docker network
-    # ports:
-    #   - "5432:5432"
+    # This is uncommented for local BE development
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
