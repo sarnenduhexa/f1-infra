@@ -39,8 +39,9 @@ services:
     image: redis/redis-stack:7.2.0-v17
     container_name: f1_redis
     ports:
-      # This is not needed as this will be accessed internally only
-      # - "6379:6379"  # Redis port
+      # Remove port mapping for security - only accessible within Docker network
+      # This is uncommented for local BE development
+      - "6379:6379"  # Redis port
       - "8001:8001"  # RedisInsight port
     volumes:
       - redis_data:/data
