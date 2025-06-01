@@ -53,6 +53,7 @@ The application follows a modern microservices architecture with:
   - Database health checks
   - HTTP connectivity monitoring
   - Integration with container health checks
+- **CronJob**: Used Cron job to synch Seasons and Current season's races data.
 
 ### 3. Infrastructure & DevOps
 - **Containerization**: Docker support for all components
