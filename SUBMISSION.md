@@ -11,6 +11,21 @@ This a document which is an overview of the whole assignment, for more informati
 > This is deployed to the free tire of render, So it can take up to a minute to spin up after an idle state.
 > The BE is deployed to Render as well. So, if it was idle, the first time data fetch can also take upto a minute.
 
+## Behaviour as a whole
+
+- On startup, the application does not fetch any data immediately due to the rate limiter, as it would not be able to retrieve much data in a short time.
+- On the first request for the seasons list, it fetches the seasons from the Jolpi API and attempts to get the winner data for those seasons in a loop.
+- Due to the rate limiter and to maintain fast response times, we return null for winnerData for seasons that failed due to errors (primarily 429 status codes).
+- For each subsequent request for the season list, we attempt to fetch winner data for seasons where it is missing.
+- We follow a similar structure for races within a season.
+- When retrieving races for a season, we first get the race list and then attempt to fetch as much winner data as possible, returning partial data where necessary.
+- For each new request, we attempt to fetch winner data that is not available in our database.
+- Once we have all the required data, we no longer make calls to the Jolpi API.
+- We only make requests to the Jolpi API for data that is unavailable in our database, not for data we already have.
+- Weekly CronJobs attempt to fetch and update our database with additional data. We schedule these calls at different hours to work around the Jolpi API's rate limits.
+
+You can read more about the Jolpi API rate limits [here](https://github.com/jolpica/jolpica-f1/blob/main/docs/rate_limits.md).
+
 ## Project Overview
 This submission presents a complete full-stack implementation of an F1 Dashboard application, consisting of three main components:
 1. Frontend (React-based web application)
